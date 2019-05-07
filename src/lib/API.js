@@ -72,3 +72,16 @@ export function detachFromCall() {
         dispatch('/game/p/detach', {method: 'POST'}).then(data => {res(data)});
     });
 }
+
+export function setUnitStatus(unitId, newStatus) {
+    if(newStatus === "Off-Duty") newStatus = null;
+    return new Promise((res, rej) => {
+        dispatch('/game/d/status/' + unitId, {method: 'PATCH',
+            body: JSON.stringify({
+                status: newStatus
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}

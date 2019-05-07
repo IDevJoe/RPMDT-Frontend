@@ -6,6 +6,8 @@ import {SET_USER} from "../reducers";
 import Police_Pre from '../pages/police/PrePatrol';
 import Police_Patrol from '../pages/police/Patrol';
 
+import Dispatch from '../pages/dispatch/Dispatch';
+
 function AppRouter({user, dispatch}) {
     return (
         <Router>
@@ -69,6 +71,8 @@ function AppRouter({user, dispatch}) {
                 <div className={"ui container"}>
                     <Route path={"/p/pre"} component={Police_Pre} />
                     <Route path={"/p/patrol"} component={Police_Patrol} />
+
+                    <Route path={"/d/dispatch"} component={Dispatch} />
                 </div>
             </div>
         </Router>

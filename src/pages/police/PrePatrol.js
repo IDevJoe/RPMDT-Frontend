@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
+import Lang from '../../lang';
 
 function UnitList({units}) {
     let x = [];
@@ -35,20 +36,21 @@ class PrePatrol extends React.Component {
     }
 
     render() {
+        let LangSpec = Lang.POLICE.PRE_PATROL;
         if(this.props.state == null) return null;
         return (
             <div>
-                <h1>Pre-Patrol</h1>
+                <h1>{LangSpec.NAME}</h1>
                 <div className={"ui divider"}> </div>
                 <div className={"ui grid"}>
                     <div className={"ui eight wide column"}>
-                        <h5>Online Units</h5>
+                        <h5>{LangSpec.ONLINE_UNITS}</h5>
                         <table className={"ui table"}>
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Callsign</th>
-                                <th>Status</th>
+                                <th>{LangSpec.UNIT_NAME}</th>
+                                <th>{LangSpec.UNIT_CALLSIGN}</th>
+                                <th>{LangSpec.UNIT_STATUS}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,11 +63,11 @@ class PrePatrol extends React.Component {
                         <table className={"ui table"}>
                             <thead>
                             <tr>
-                                <th>Call Number</th>
-                                <th>Summary</th>
-                                <th>10-Code</th>
-                                <th>Units Attached</th>
-                                <th>Flags</th>
+                                <th>{LangSpec.CALL_NUMBER}</th>
+                                <th>{LangSpec.CALL_SUMMARY}</th>
+                                <th>{LangSpec.CALL_CODE}</th>
+                                <th>{LangSpec.CALL_ATTACHED_COUNT}</th>
+                                <th>{LangSpec.CALL_FLAGS}</th>
                             </tr>
                             </thead>
                             <tbody>
