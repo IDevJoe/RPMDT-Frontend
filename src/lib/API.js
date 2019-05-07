@@ -1,4 +1,6 @@
-export const API_ENDPOINT = process.env.NODE_ENV !== "production" ? 'http://localhost:8000' : 'https://api.mdt.devjoe.net';
+import {DEV_API, PROD_API} from "../constants";
+
+export const API_ENDPOINT = process.env.NODE_ENV !== "production" ? DEV_API : PROD_API;
 
 export function dispatch(url, options) {
     if(options.headers == null)

@@ -2,11 +2,12 @@ import Pusher from 'pusher-js';
 import {store} from "../index";
 import {SET_STATE} from "../reducers";
 import attachS from '../sound/attach.mp3';
+import {PUSHER_APP_CLUSTER, PUSHER_APP_KEY} from "../constants";
 
 Pusher.logToConsole = process.env.NODE_ENV !== "production";
 
-const sock = new Pusher('a34385f9b751f4914c29', {
-    cluster: 'us2',
+const sock = new Pusher(PUSHER_APP_KEY, {
+    cluster: PUSHER_APP_CLUSTER,
     forceTLS: true
 });
 
