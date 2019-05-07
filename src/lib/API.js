@@ -85,3 +85,34 @@ export function setUnitStatus(unitId, newStatus) {
             }}).then(data => {res(data)});
     });
 }
+
+export function createCall(code, summary, primary, description) {
+    return new Promise((res, rej) => {
+        dispatch('/game/d/call', {method: 'POST',
+            body: JSON.stringify({
+                code: code,
+                summary: summary,
+                primary_id: primary,
+                description: description
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
+
+export function attachToCall(unit, call) {
+    if(call == -1)
+        return new Promise((res, rej) => {
+            dispatch('/game/d/unit/' + unit + "/detach", {method: 'POST'}).then(data => {res(data)});
+        });
+    return new Promise((res, rej) => {
+        dispatch('/game/d/call/' + call + "/attach/" + unit, {method: 'POST'}).then(data => {res(data)});
+    });
+}
+
+export function archiveCall(call) {
+    return new Promise((res, rej) => {
+        dispatch('/game/d/call/' + call, {method: 'DELETE'}).then(data => {res(data)});
+    });
+}

@@ -1,7 +1,14 @@
 import React from 'react';
 import {connect} from "react-redux";
 import Lang from '../../lang';
-import {setUnitStatus} from "../../lib/API";
+import {archiveCall, attachToCall, createCall, setUnitStatus} from "../../lib/API";
+import $ from 'jquery';
+
+function confirmBeforeArchive(id) {
+    if(window.confirm("Are you sure you want to archive #" + id + "?")) {
+        archiveCall(id);
+    }
+}
 
 function CallBoard({calls}) {
     let x = [];
@@ -9,7 +16,18 @@ function CallBoard({calls}) {
         x.push(<tr key={e.id}>
             <td>{e.code}</td>
             <td>{e.summary}</td>
+            <td>{e.primary.current_callsign.callsign}</td>
             <td>{e.units.length}</td>
+            <td>
+                <button className="ui mini basic button" onClick={() => confirmBeforeArchive(e.id)}>
+                    <i className="icon archive"> </i>
+                    Archive
+                </button>
+                <button className="ui mini basic button">
+                    <i className="icon file"> </i>
+                    View
+                </button>
+            </td>
         </tr>)
     });
     return x;
@@ -23,17 +41,27 @@ function CallDrop({calls}) {
     return x;
 }
 
+function UnitDrop({units}) {
+    let x = [];
+    units.forEach((e) => {
+        x.push(<option key={e.id} value={e.id}>{e.current_callsign.callsign} - {e.name}</option>)
+    });
+    return x;
+}
+
 function UList({state, dispatch}) {
     let x = [];
     let lang = Lang.STATUSES;
     state.police.forEach((e) => {
         let a;
+        let b;
         let backColor = "#41eef4";
         if(e.status === "Busy") backColor = "orange";
         if(e.status === "Available") backColor="#98f442";
         x.push(<tr key={e.id} style={{backgroundColor: backColor}}>
             <td>{e.current_callsign.callsign}</td>
-            <td><select value={e.activecall != null ? e.activecall.id : null}>
+            <td><select ref={(e) => b = e} value={e.activecall != null ? e.activecall.id : -1} onChange={() => attachToCall(e.id, b.value)}>
+                <option value={-1}>Unassigned</option>
                 <CallDrop calls={state.calls} />
             </select></td>
             <td><select value={e.status} ref={(e) => a = e} onChange={() => {setUnitStatus(e.id, a.value)}}>
@@ -51,6 +79,38 @@ function UList({state, dispatch}) {
 
 class Dispatch extends React.Component {
 
+    constructor(p) {
+        super(p);
+        this.state = {create_loading: false};
+        this.createButton = this.createButton.bind(this);
+    }
+
+    componentDidMount() {
+        $('.ui.dropdown')
+            .dropdown();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        $('.ui.dropdown')
+            .dropdown();
+    }
+
+    createButton(e) {
+        e.preventDefault();
+        this.setState({create_loading: true});
+        createCall(this.create_code.value, this.create_summary.value, this.create_primary.value, this.create_desc.value).then(e => {
+            this.setState({create_loading: false});
+            if(e.code !== 201) {
+                alert("Call could not be created.");
+                return;
+            }
+            this.create_desc.value = "";
+            this.create_primary.value = "";
+            this.create_code.value = "";
+            this.create_summary.value = "";
+        });
+    }
+
     render() {
         if(this.props.state == null) return null;
         return (
@@ -63,6 +123,7 @@ class Dispatch extends React.Component {
                             <th>Summary</th>
                             <th>Primary Unit</th>
                             <th>Attached</th>
+                            <th>Options</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,7 +149,38 @@ class Dispatch extends React.Component {
                         </div>
                     </div>
                     <div className={"eight wide column"}>
-                        <h5>New Call</h5>
+                        <div className={"ui segment"}>
+                            <span className={"ui ribbon label"}>New Call</span>
+                            <div className={"ui form"}>
+                                <div className={"ui fields"}>
+                                    <div className={"ui field"}>
+                                        <label>Code</label>
+                                        <select ref={(e) => this.create_code = e} className={"ui search dropdown"}>
+                                            <option>Traffic Stop</option>
+                                            <option>Pursuit</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div className={"ui field"}>
+                                        <label>Summary</label>
+                                        <input ref={(e) => this.create_summary = e} type={"text"} maxLength={255} />
+                                    </div>
+                                </div>
+                                <div className={"ui field"}>
+                                    <label>Full Description</label>
+                                    <textarea ref={(e) => this.create_desc = e}>
+
+                                    </textarea>
+                                </div>
+                                <div className={"ui field"}>
+                                    <label>Primary Unit</label>
+                                    <select ref={(e) => this.create_primary = e}>
+                                        <UnitDrop units={this.props.state.police.filter((e) => e.status === "Available")} />
+                                    </select>
+                                </div>
+                                <button onClick={this.createButton} className={"black ui button" + (this.state.create_loading ? ' loading' : '')}>Create</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

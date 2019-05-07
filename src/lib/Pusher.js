@@ -15,6 +15,7 @@ var police = sock.subscribe('police');
 var civilian = sock.subscribe('civilian');
 var policecalls = sock.subscribe('police.calls');
 var personal;
+var attachedCall;
 
 export function initPusher() {
     store.subscribe(() => {
@@ -24,6 +25,12 @@ export function initPusher() {
         } else if(state.user == null && personal !== undefined) {
             personalUbsub();
             personal = undefined;
+        }
+        if(state.active_call != null && attachedCall === undefined) {
+            attachedCall = sock.subscribe('police.calls.' + state.active_call.id);
+        } else if(state.active_call == null && attachedCall !== undefined) {
+            attachedCall.unsubscribe();
+            attachedCall = undefined;
         }
     });
 }
@@ -84,6 +91,23 @@ police.bind('user.statuschange', data => {
 
 let attachSound = new Audio(attachS);
 
+function handleDetach(unit) {
+    if(store.getState().user == null) return;
+    let clone = cloneState();
+    let sunit = clone.police.find((e) => e.id === unit.id);
+    if(sunit != null) {
+        let call = clone.calls.find((e) => e.id === sunit.activecall.id);
+        if(call != null) {
+            let unit2 = call.units.find((e) => e.id === sunit.id);
+            var index = call.units.indexOf(unit2);
+            if (index !== -1) call.units.splice(index, 1);
+        }
+    }
+    sunit.activecall = null;
+    if(isCurrentUser(unit.id)) clone.active_call = null;
+    store.dispatch({type: SET_STATE, state: clone});
+}
+
 policecalls.bind('call.assign', data => {
     if(store.getState().user == null) return;
     let unit = data.unit;
@@ -91,26 +115,34 @@ policecalls.bind('call.assign', data => {
     let call = clone.calls.find((e) => e.id === data.call.id);
     call.units.push(unit);
     let sunit = clone.police.find((e) => e.id === data.unit.id);
-    sunit.activecall = call;
     if(isCurrentUser(unit.id)) {
         clone.active_call = call;
         attachSound.play();
+    } else if(sunit != null) {
+        if(sunit.activecall != null) handleDetach(sunit);
+        sunit.activecall = call;
     }
     store.dispatch({type: SET_STATE, state: clone});
 });
 
 policecalls.bind('unit.detach', data => {
+    handleDetach(data.unit)
+});
+
+policecalls.bind('call.update', data => {
     if(store.getState().user == null) return;
-    let unit = data.unit;
     let clone = cloneState();
-    let sunit = clone.police.find((e) => e.id === data.unit.id);
-    let call = clone.calls.find((e) => e.id === sunit.activecall.id);
-    if(call != null) {
-        let unit2 = call.units.find((e) => e.id === sunit.id);
-        var index = call.units.indexOf(unit2);
-        if (index !== -1) call.units.splice(index, 1);
-    }
-    sunit.activecall = null;
-    if(isCurrentUser(unit.id)) clone.active_call = null;
+    let call = clone.calls.find((e) => e.id === data.call.id);
+    if(call == null) clone.calls.push(data.call);
+    else Object.assign(call, data.call);
+    store.dispatch({type: SET_STATE, state: clone});
+});
+
+policecalls.bind('call.archive', data => {
+    if(store.getState().user == null) return;
+    let clone = cloneState();
+    let call = clone.calls.find((e) => e.id === data.call.id);
+    var index = clone.calls.indexOf(call);
+    if (index !== -1) clone.calls.splice(index, 1);
     store.dispatch({type: SET_STATE, state: clone});
 });
