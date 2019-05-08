@@ -116,3 +116,13 @@ export function archiveCall(call) {
         dispatch('/game/d/call/' + call, {method: 'DELETE'}).then(data => {res(data)});
     });
 }
+
+export function updateCall(call, data) {
+    return new Promise((res, rej) => {
+        dispatch('/game/d/call/' + call, {method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}

@@ -43,9 +43,9 @@ class Patrol extends React.Component {
                             <div className={"field"}>
                                 <label>Status</label>
                                 <div className={"ui buttons"}>
-                                    <button disabled={this.props.state.active_call != null} className={"ui button" + (status == null ? " active" : "")} onClick={() => changeStatus(null)}>Off-Duty</button>
-                                    <button disabled={this.props.state.active_call != null} className={"ui button" + (status === "Busy" ? " active" : "")} onClick={() => changeStatus("Busy")}>Busy</button>
-                                    <button disabled={this.props.state.active_call != null} className={"ui button" + (status === "Available" ? " active" : "")} onClick={() => changeStatus("Available")}>Available</button>
+                                    <button disabled={this.props.state.active_call != null || this.props.state.callsign == null} className={"ui button" + (status == null ? " active" : "")} onClick={() => changeStatus(null)}>Off-Duty</button>
+                                    <button disabled={this.props.state.active_call != null || this.props.state.callsign == null} className={"ui button" + (status === "Busy" ? " active" : "")} onClick={() => changeStatus("Busy")}>Busy</button>
+                                    <button disabled={this.props.state.active_call != null || this.props.state.callsign == null} className={"ui button" + (status === "Available" ? " active" : "")} onClick={() => changeStatus("Available")}>Available</button>
                                 </div>
                                 <div className={"ui buttons"} style={{marginTop: "10px"}}>
                                     <button disabled={this.props.state.active_call == null} className={"ui button" + (status === "Attached" ? " active" : "")} onClick={() => changeStatus("Attached")}>Attached</button>

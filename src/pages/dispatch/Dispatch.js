@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Lang from '../../lang';
 import {archiveCall, attachToCall, createCall, setUnitStatus} from "../../lib/API";
 import $ from 'jquery';
+import UList from '../../components/UnitList';
 
 function confirmBeforeArchive(id) {
     if(window.confirm("Are you sure you want to archive #" + id + "?")) {
@@ -10,7 +11,7 @@ function confirmBeforeArchive(id) {
     }
 }
 
-function CallBoard({calls}) {
+function CallBoard({calls, history}) {
     let x = [];
     calls.forEach((e) => {
         x.push(<tr key={e.id}>
@@ -23,7 +24,7 @@ function CallBoard({calls}) {
                     <i className="icon archive"> </i>
                     Archive
                 </button>
-                <button className="ui mini basic button">
+                <button className="ui mini basic button" onClick={() => history.push('/d/call/' + e.id)}>
                     <i className="icon file"> </i>
                     View
                 </button>
@@ -33,46 +34,10 @@ function CallBoard({calls}) {
     return x;
 }
 
-function CallDrop({calls}) {
-    let x = [];
-    calls.forEach((e) => {
-        x.push(<option key={e.id} value={e.id}>{e.id} - {e.summary}</option>)
-    });
-    return x;
-}
-
 function UnitDrop({units}) {
     let x = [];
     units.forEach((e) => {
         x.push(<option key={e.id} value={e.id}>{e.current_callsign.callsign} - {e.name}</option>)
-    });
-    return x;
-}
-
-function UList({state, dispatch}) {
-    let x = [];
-    let lang = Lang.STATUSES;
-    state.police.forEach((e) => {
-        let a;
-        let b;
-        let backColor = "#41eef4";
-        if(e.status === "Busy") backColor = "orange";
-        if(e.status === "Available") backColor="#98f442";
-        x.push(<tr key={e.id} style={{backgroundColor: backColor}}>
-            <td>{e.current_callsign.callsign}</td>
-            <td><select ref={(e) => b = e} value={e.activecall != null ? e.activecall.id : -1} onChange={() => attachToCall(e.id, b.value)}>
-                <option value={-1}>Unassigned</option>
-                <CallDrop calls={state.calls} />
-            </select></td>
-            <td><select value={e.status} ref={(e) => a = e} onChange={() => {setUnitStatus(e.id, a.value)}}>
-                <option value={"Off-Duty"} disabled={e.activecall != null}>{lang.OFFDUTY}</option>
-                <option value={"Busy"} disabled={e.activecall != null}>{lang.BUSY}</option>
-                <option value={"Available"} disabled={e.activecall != null}>{lang.AVAILABLE}</option>
-                <option value={"Attached"} disabled={e.activecall == null}>{lang.ATTACHED}</option>
-                <option value={"Enroute"} disabled={e.activecall == null}>{lang.ENROUTE}</option>
-                <option value={"On Scene"} disabled={e.activecall == null}>{lang.ONSCENE}</option>
-            </select></td>
-        </tr>)
     });
     return x;
 }
@@ -127,7 +92,7 @@ class Dispatch extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <CallBoard calls={this.props.state.calls} />
+                        <CallBoard calls={this.props.state.calls} history={this.props.history} />
                     </tbody>
                 </table>
                 <div className={"ui grid"} style={{marginTop: '20px'}}>

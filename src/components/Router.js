@@ -7,6 +7,7 @@ import Police_Pre from '../pages/police/PrePatrol';
 import Police_Patrol from '../pages/police/Patrol';
 
 import Dispatch from '../pages/dispatch/Dispatch';
+import Dispatch_Call from '../pages/dispatch/CallSpec';
 
 function AppRouter({user, dispatch}) {
     return (
@@ -73,6 +74,7 @@ function AppRouter({user, dispatch}) {
                     <Route path={"/p/patrol"} component={Police_Patrol} />
 
                     <Route path={"/d/dispatch"} component={Dispatch} />
+                    <Route path={"/d/call/:call"} component={Dispatch_Call} />
                 </div>
             </div>
         </Router>

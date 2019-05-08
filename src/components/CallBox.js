@@ -1,4 +1,5 @@
 import React from 'react';
+import CallLog from './CallLog';
 
 function CallBox({call}) {
     if(call == null) return null;
@@ -12,7 +13,7 @@ function CallBox({call}) {
                         </textarea>
                 </div>
                 <div className={"eight wide column"}>
-
+                    <CallLog log={call.log} />
                 </div>
             </div>
         </div>
