@@ -11,7 +11,7 @@ function EventList({events}) {
             <div className="content">
                 <div className="summary">
                     {e.message}
-                    <div className="date">{date.toLocaleTimeString()}</div>
+                    <div className="date">{date.getUTCHours()}:{date.getUTCMinutes()}:{date.getUTCSeconds()}</div>
                 </div>
             </div>
         </div>);

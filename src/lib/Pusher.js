@@ -156,7 +156,8 @@ policecalls.bind('call.log', data => {
     if(call == null) return;
     call.log.push(data.log);
     if(clone.active_call != null && clone.active_call.id == data.log.call_id && call !== clone.active_call) {
-        clone.active_call.log.push(data.log);
+        if(clone.active_call.log.find((e) => e.id == data.log.id) == null)
+            clone.active_call.log.push(data.log);
     }
     store.dispatch({type: SET_STATE, state: clone});
 });
