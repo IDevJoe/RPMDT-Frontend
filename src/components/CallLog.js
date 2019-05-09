@@ -27,7 +27,7 @@ class CallLog extends React.Component {
 
     render() {
         return (<div>
-            <div className="ui feed" style={{height: "500px", overflowY: "scroll"}}>
+            <div className="ui feed" style={{height: "400px", overflowY: "scroll"}}>
                 <EventList events={this.props.log} />
                 <div style={{ float:"left", clear: "both" }}
                      ref={(el) => { this.messagesEnd = el; }}> </div>

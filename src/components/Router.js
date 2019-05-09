@@ -9,6 +9,9 @@ import Police_Patrol from '../pages/police/Patrol';
 import Dispatch from '../pages/dispatch/Dispatch';
 import Dispatch_Call from '../pages/dispatch/CallSpec';
 
+import Civ_Characters from '../pages/civ/Characters';
+import Civ_NewC from '../pages/civ/NewCharacter';
+
 function AppRouter({user, dispatch}) {
     return (
         <Router>
@@ -75,6 +78,9 @@ function AppRouter({user, dispatch}) {
 
                     <Route path={"/d/dispatch"} component={Dispatch} />
                     <Route path={"/d/call/:call"} component={Dispatch_Call} />
+
+                    <Route path={"/c/characters"} exact component={Civ_Characters} />
+                    <Route path={"/c/characters/new"} component={Civ_NewC} />
                 </div>
             </div>
         </Router>
