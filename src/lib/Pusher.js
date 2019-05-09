@@ -152,7 +152,7 @@ policecalls.bind('call.archive', data => {
 policecalls.bind('call.log', data => {
     if(store.getState().user == null) return;
     let clone = cloneState();
-    let call = clone.calls.find((e) => e.id === data.log.call_id);
+    let call = clone.calls.find((e) => e.id == data.log.call_id);
     if(call == null) return;
     call.log.push(data.log);
     if(clone.active_call != null && clone.active_call.id == data.log.call_id && call !== clone.active_call) {
