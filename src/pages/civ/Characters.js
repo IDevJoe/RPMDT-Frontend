@@ -1,5 +1,21 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+
+function CharacterList({characters}) {
+    let x = [];
+    characters.forEach(e => {
+        x.push(<tr>
+            <td>{e.fname} {e.lname}</td>
+            <td>{e.lstatus}</td>
+            <td>{e.warrants.length}</td>
+            <td>0</td>
+
+        </tr>)
+    });
+
+    return x;
+}
 
 class Characters extends React.Component {
     render() {
@@ -14,15 +30,21 @@ class Characters extends React.Component {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Suspended?</th>
+                        <th>License Status</th>
                         <th>Warrant Count</th>
-                        <th>DL Number</th>
                         <th>Vehicle Count</th>
                     </tr>
                 </thead>
+                <tbody>
+                <CharacterList characters={this.props.user.characters} />
+                </tbody>
             </table>
         </div>);
     }
 }
 
-export default Characters;
+let MSTP = ({user}) => {
+        return {user};
+};
+
+export default connect(MSTP)(Characters);

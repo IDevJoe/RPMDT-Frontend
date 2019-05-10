@@ -126,3 +126,13 @@ export function updateCall(call, data) {
             }}).then(data => {res(data)});
     });
 }
+
+export function newCharacter(info) {
+    return new Promise((res, rej) => {
+        dispatch('/c/character', {method: 'POST',
+            body: JSON.stringify(info),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
