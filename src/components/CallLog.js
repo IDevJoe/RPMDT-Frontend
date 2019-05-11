@@ -6,7 +6,7 @@ function EventList({events}) {
         let date = new Date(e.created_at);
         x.push(<div className="event">
             <div className="label">
-                <i className="info icon"> </i>
+                <i className={LogIcons[e.type] + " icon"}> </i>
             </div>
             <div className="content">
                 <div className="summary">
@@ -18,6 +18,14 @@ function EventList({events}) {
     });
     return x;
 }
+
+let LogIcons = {
+    TYPE_CALL_ASSIGN: "user plus",
+    TYPE_CALL_ARCHIVE: "archive",
+    TYPE_CALL_DETACH: "user times",
+    TYPE_CALL_UPDATE: "pencil alternate",
+    TYPE_UNIT_STATUSCHANGE: "car"
+};
 
 class CallLog extends React.Component {
 

@@ -11,6 +11,7 @@ import Dispatch_Call from '../pages/dispatch/CallSpec';
 
 import Civ_Characters from '../pages/civ/Characters';
 import Civ_NewC from '../pages/civ/NewCharacter';
+import Civ_EditC from '../pages/civ/EditCharacter';
 
 function AppRouter({user, dispatch}) {
     return (
@@ -81,6 +82,7 @@ function AppRouter({user, dispatch}) {
 
                     <Route path={"/c/characters"} exact component={Civ_Characters} />
                     <Route path={"/c/characters/new"} component={Civ_NewC} />
+                    <Route path={"/c/characters/spec/:id"} component={Civ_EditC} />
                 </div>
             </div>
         </Router>

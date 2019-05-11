@@ -136,3 +136,8 @@ export function newCharacter(info) {
             }}).then(data => {res(data)});
     });
 }
+export function delCharacter(id) {
+    return new Promise((res, rej) => {
+        dispatch('/c/character/' + id, {method: 'DELETE'}).then(data => {res(data)});
+    });
+}

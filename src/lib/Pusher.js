@@ -5,6 +5,8 @@ import attachS from '../sound/attach.mp3';
 import {PUSHER_APP_CLUSTER, PUSHER_APP_KEY} from "../constants";
 import {RegisterEvents} from "./Pusher/CallManager";
 import {API_ENDPOINT} from "./API";
+import * as UserManager from './Pusher/UserManager';
+import * as PoliceManager from './Pusher/PoliceManager';
 
 Pusher.logToConsole = process.env.NODE_ENV !== "production";
 
@@ -28,10 +30,12 @@ export function initPusher() {
     });
     police = sock.subscribe('police');
     civilian = sock.subscribe('civilian');
+    PoliceManager.RegisterEvents(police);
     store.subscribe(() => {
         let state = store.getState();
         if(state.user != null && personal === undefined) {
             subscribeToPersonal(state.user.id);
+
         } else if(state.user == null && personal !== undefined) {
             personalUbsub();
             personal = undefined;
@@ -50,6 +54,7 @@ function subscribeToPersonal(id) {
     policecalls = sock.subscribe('private-police.calls');
     personal = sock.subscribe('private-user.' + id);
     RegisterEvents(policecalls);
+    UserManager.subscribe(personal);
 }
 
 function personalUbsub() {

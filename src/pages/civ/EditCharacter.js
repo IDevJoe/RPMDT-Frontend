@@ -3,6 +3,7 @@ import $ from 'jquery';
 import {Link} from "react-router-dom";
 import warrants from '../../config/warrants';
 import {newCharacter} from "../../lib/API";
+import {connect} from "react-redux";
 
 function WarrantDrop() {
     let x = [];
@@ -24,12 +25,13 @@ function WarrantList({warrants, remove}) {
     return x;
 }
 
-class NewCharacter extends React.Component {
+class EditCharacter extends React.Component {
 
     constructor(p) {
         super(p);
-        this.state = {warrants: []};
-        this.processNewCharacter = this.processNewCharacter.bind(this);
+        let character = this.props.user.characters.find((e) => e.id == this.props.match.params.id);
+        this.state = {warrants: character.warrants};
+        this.updateCharacter = this.updateCharacter.bind(this);
         this.newWarrant = this.newWarrant.bind(this);
         this.removeWarrant = this.removeWarrant.bind(this);
         this.ls = [];
@@ -61,7 +63,7 @@ class NewCharacter extends React.Component {
         this.warrants.info.value = "";
     }
 
-    processNewCharacter(e) {
+    updateCharacter(e) {
         e.preventDefault();
         let character = {
             lname: this.lname.value,
@@ -92,33 +94,34 @@ class NewCharacter extends React.Component {
     }
 
     render() {
+        let character = this.props.user.characters.find((e) => e.id == this.props.match.params.id);
         return <div>
-            <h1>New Character</h1>
+            <h1>Update Character</h1>
             <div className={"ui divider"}></div>
             <form className={"ui form"}>
                 <div className={"ui grid"}>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>Last Name</label>
-                            <input type={"text"} ref={(e) => this.lname = e}/>
+                            <input type={"text"} defaultValue={character.lname} ref={(e) => this.lname = e}/>
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>Middle Name</label>
-                            <input type={"text"} ref={(e) => this.mname = e} />
+                            <input type={"text"} defaultValue={character.mname} ref={(e) => this.mname = e} />
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>First Name</label>
-                            <input type={"text"} ref={(e) => this.fname = e} />
+                            <input type={"text"} defaultValue={character.fname} ref={(e) => this.fname = e} />
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>Eye Color</label>
-                            <select className={"ui dropdown"} ref={(e) => this.eyecolor = e}>
+                            <select className={"ui dropdown"} defaultValue={character.eye_color} ref={(e) => this.eyecolor = e}>
                                 <option>BLU</option>
                                 <option>GRN</option>
                                 <option>HZL</option>
@@ -131,25 +134,25 @@ class NewCharacter extends React.Component {
                     <div className={"eight wide column"}>
                         <div className={"field"}>
                             <label>Street Address</label>
-                            <input type={"text"} ref={(e) => this.streetaddr = e} />
+                            <input type={"text"} defaultValue={character.street_addr} ref={(e) => this.streetaddr = e} />
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>City</label>
-                            <input type={"text"} ref={(e) => this.city = e} />
+                            <input type={"text"} defaultValue={character.city} ref={(e) => this.city = e} />
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>State</label>
-                            <input type={"text"} value={"LS"} ref={(e) => this.cstate = e} disabled />
+                            <input type={"text"} defaultValue={character.state} value={"LS"} ref={(e) => this.cstate = e} disabled />
                         </div>
                     </div>
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>License Status</label>
-                            <select className={"ui search dropdown"} ref={(e) => this.ls = e}>
+                            <select className={"ui search dropdown"} defaultValue={character.lstatus} ref={(e) => this.ls = e}>
                                 <option>None</option>
                                 <option>Valid</option>
                                 <option>Suspended</option>
@@ -160,7 +163,7 @@ class NewCharacter extends React.Component {
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>DOB</label>
-                            <input type={"date"} ref={(e) => this.dob = e} />
+                            <input type={"date"} defaultValue={character.dob} ref={(e) => this.dob = e} />
                         </div>
                     </div>
                     <div className={"eight wide column"}>
@@ -194,12 +197,16 @@ class NewCharacter extends React.Component {
                 <Link to={"/c/characters"} className={"ui button"}>
                     Back
                 </Link>
-                <button className={"black ui button"} onClick={this.processNewCharacter}>
-                    Create Character
+                <button className={"black ui button"} onClick={this.updateCharacter}>
+                    Update Character
                 </button>
             </form>
         </div>;
     }
 }
 
-export default NewCharacter;
+let MSTP = ({user}) => {
+    return {user};
+};
+
+export default connect(MSTP)(EditCharacter);
