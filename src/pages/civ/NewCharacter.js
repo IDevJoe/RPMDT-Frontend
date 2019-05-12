@@ -28,7 +28,7 @@ class NewCharacter extends React.Component {
 
     constructor(p) {
         super(p);
-        this.state = {warrants: []};
+        this.state = {warrants: [], loading: false};
         this.processNewCharacter = this.processNewCharacter.bind(this);
         this.newWarrant = this.newWarrant.bind(this);
         this.removeWarrant = this.removeWarrant.bind(this);
@@ -76,7 +76,9 @@ class NewCharacter extends React.Component {
             dob: this.dob.value
         };
         console.log("Character Built", character);
+        this.setState({loading: true});
         newCharacter(character).then(e => {
+            this.setState({loading: false});
             if(!e.code == null || e.code !== 201) {
                 alert('Character was not created. Did you fill everything in?');
                 return;
@@ -95,7 +97,10 @@ class NewCharacter extends React.Component {
         return <div>
             <h1>New Character</h1>
             <div className={"ui divider"}></div>
-            <form className={"ui form"}>
+            <p>Need a push in the right direction? Might I suggest the <a href={"https://www.fakenamegenerator.com/"} target={"_blank"}>
+            Fake Name Generator
+            </a>?</p>
+            <form className={"ui form" + (this.state.loading ? ' loading' : '')}>
                 <div className={"ui grid"}>
                     <div className={"four wide column"}>
                         <div className={"field"}>

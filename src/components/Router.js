@@ -13,32 +13,20 @@ import Civ_Characters from '../pages/civ/Characters';
 import Civ_NewC from '../pages/civ/NewCharacter';
 import Civ_EditC from '../pages/civ/EditCharacter';
 
+import Un_Lookup_Character from '../pages/universal/lookup/CharacterLookup';
+
 function AppRouter({user, dispatch}) {
     return (
         <Router>
             <div className="ui fixed visible sidebar inverted vertical menu" id={"main_nav"}>
                 <NavLink to={"/"} exact className={"item"}>Home</NavLink>
                 <div className={"item"}>
-                    <div className={"header"}>Police</div>
+                    <div className={"header"}>Emergency Responders</div>
                     <div className={"menu"}>
                         <NavLink to={"/p/pre"} className="item">
                             Pre-Patrol
                         </NavLink>
                         <NavLink to={"/p/patrol"} className="item">
-                            Patrol
-                        </NavLink>
-                        <NavLink to={"/p/plate"} className="item">
-                            License Plate Lookup
-                        </NavLink>
-                        <NavLink to={"/p/id"} className={"item"}>
-                            ID Lookup
-                        </NavLink>
-                    </div>
-                </div>
-                <div className={"item"}>
-                    <div className={"header"}>Fire/EMS</div>
-                    <div className={"menu"}>
-                        <NavLink to={"/f/patrol"} className="item">
                             Patrol
                         </NavLink>
                     </div>
@@ -60,10 +48,15 @@ function AppRouter({user, dispatch}) {
                         <NavLink to={"/d/dispatch"} className="item">
                             Dispatch
                         </NavLink>
-                        <NavLink to={"/d/plate"} className="item">
+                    </div>
+                </div>
+                <div className={"item"}>
+                    <div className={"header"}>Database</div>
+                    <div className={"menu"}>
+                        <NavLink to={"/u/plate"} className="item">
                             License Plate Lookup
                         </NavLink>
-                        <NavLink to={"/d/id"} className="item">
+                        <NavLink to={"/u/id"} className="item">
                             ID Lookup
                         </NavLink>
                     </div>
@@ -83,6 +76,8 @@ function AppRouter({user, dispatch}) {
                     <Route path={"/c/characters"} exact component={Civ_Characters} />
                     <Route path={"/c/characters/new"} component={Civ_NewC} />
                     <Route path={"/c/characters/spec/:id"} component={Civ_EditC} />
+
+                    <Route path={"/u/id"} component={Un_Lookup_Character} />
                 </div>
             </div>
         </Router>

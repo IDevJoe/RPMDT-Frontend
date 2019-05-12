@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import {Link} from "react-router-dom";
 import warrants from '../../config/warrants';
-import {newCharacter} from "../../lib/API";
+import {createWarrant, deleteWarrant, newCharacter, updateCharacter} from "../../lib/API";
 import {connect} from "react-redux";
 
 function WarrantDrop() {
@@ -19,7 +19,7 @@ function WarrantList({warrants, remove}) {
         x.push(<tr key={e.info}>
             <td>{e.type}</td>
             <td>{e.info}</td>
-            <td><button onClick={() => remove(e)}>Remove</button></td>
+            <td><button onClick={(x) => {x.preventDefault(); remove(e);}}>Remove</button></td>
         </tr>);
     });
     return x;
@@ -30,7 +30,7 @@ class EditCharacter extends React.Component {
     constructor(p) {
         super(p);
         let character = this.props.user.characters.find((e) => e.id == this.props.match.params.id);
-        this.state = {warrants: character.warrants};
+        this.state = {loading: false};
         this.updateCharacter = this.updateCharacter.bind(this);
         this.newWarrant = this.newWarrant.bind(this);
         this.removeWarrant = this.removeWarrant.bind(this);
@@ -54,17 +54,17 @@ class EditCharacter extends React.Component {
 
     newWarrant(e) {
         e.preventDefault();
+        let ch = this.props.user.characters.find((e) => e.id == this.props.match.params.id);
         let info = {type: this.warrants.type.value, info: this.warrants.info.value};
         console.log(info);
-        let clone = this.state.warrants.splice(0);
         if(info.info === "") return;
-        clone.push(info);
-        this.setState({warrants: clone});
+        createWarrant(ch.id, info);
         this.warrants.info.value = "";
     }
 
     updateCharacter(e) {
         e.preventDefault();
+        let ch = this.props.user.characters.find((e) => e.id == this.props.match.params.id);
         let character = {
             lname: this.lname.value,
             mname: this.mname.value,
@@ -78,19 +78,19 @@ class EditCharacter extends React.Component {
             dob: this.dob.value
         };
         console.log("Character Built", character);
-        newCharacter(character).then(e => {
-            if(!e.code == null || e.code !== 201) {
+        this.setState({loading: true});
+        updateCharacter(ch.id, character).then(e => {
+            this.setState({loading: false});
+            if(e != null) {
                 alert('Character was not created. Did you fill everything in?');
                 return;
             }
-            this.props.history.push("/c/characters");
+            alert("Character Updated")
         });
     }
 
     removeWarrant(x) {
-        let clone = this.state.warrants.splice(0);
-        clone.splice(clone.indexOf(x), 1);
-        this.setState({warrants: clone});
+        deleteWarrant(x.id);
     }
 
     render() {
@@ -146,7 +146,7 @@ class EditCharacter extends React.Component {
                     <div className={"four wide column"}>
                         <div className={"field"}>
                             <label>State</label>
-                            <input type={"text"} defaultValue={character.state} value={"LS"} ref={(e) => this.cstate = e} disabled />
+                            <input type={"text"} value={"LS"} ref={(e) => this.cstate = e} disabled />
                         </div>
                     </div>
                     <div className={"four wide column"}>
@@ -176,7 +176,7 @@ class EditCharacter extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                <WarrantList warrants={this.state.warrants} remove={this.removeWarrant} />
+                                <WarrantList warrants={character.warrants} remove={this.removeWarrant} />
                             </tbody>
                         </table>
                         <div className={"fields"}>
@@ -197,7 +197,7 @@ class EditCharacter extends React.Component {
                 <Link to={"/c/characters"} className={"ui button"}>
                     Back
                 </Link>
-                <button className={"black ui button"} onClick={this.updateCharacter}>
+                <button className={"black ui button" + (this.state.loading ? ' loading' : '')} onClick={this.updateCharacter}>
                     Update Character
                 </button>
             </form>

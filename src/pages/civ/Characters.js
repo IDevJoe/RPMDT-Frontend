@@ -6,7 +6,7 @@ import {delCharacter} from "../../lib/API";
 function CharacterList({characters, del}) {
     let x = [];
     characters.forEach(e => {
-        x.push(<tr>
+        x.push(<tr key={e.id}>
             <td>{e.fname} {e.lname}</td>
             <td>{e.lstatus}</td>
             <td>{e.warrants.length}</td>

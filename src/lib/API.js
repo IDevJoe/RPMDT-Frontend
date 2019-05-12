@@ -141,3 +141,41 @@ export function delCharacter(id) {
         dispatch('/c/character/' + id, {method: 'DELETE'}).then(data => {res(data)});
     });
 }
+
+export function updateCharacter(id, char) {
+    return new Promise((res, rej) => {
+        dispatch('/c/character/' + id, {method: 'PATCH',
+            body: JSON.stringify(char),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
+
+export function createWarrant(id, warrant) {
+    return new Promise((res, rej) => {
+        dispatch('/c/character/' + id + "/warrant", {method: 'POST',
+            body: JSON.stringify(warrant),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
+
+export function deleteWarrant(id) {
+    return new Promise((res, rej) => {
+        dispatch('/c/warrant/' + id, {method: 'DELETE'}).then(data => {res(data)});
+    });
+}
+
+export function IDLookup(lname) {
+    return new Promise((res, rej) => {
+        dispatch('/game/u/id', {method: 'POST',
+            body: JSON.stringify({
+                lname: lname
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
