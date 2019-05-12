@@ -1,5 +1,11 @@
 import React from 'react';
 
+function ft(time) {
+    time = time + "";
+    if(time.length != 2) time = "0" + time;
+    return time;
+}
+
 function EventList({events}) {
     let x = [];
     events.forEach((e) => {
@@ -11,7 +17,7 @@ function EventList({events}) {
             <div className="content">
                 <div className="summary">
                     {e.message}
-                    <div className="date">{date.getUTCHours()}:{date.getUTCMinutes()}:{date.getUTCSeconds()}</div>
+                    <div className="date">{ft(date.getHours())}:{ft(date.getMinutes())}:{ft(date.getSeconds())}</div>
                 </div>
             </div>
         </div>);
