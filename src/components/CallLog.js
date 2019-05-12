@@ -24,7 +24,8 @@ let LogIcons = {
     TYPE_CALL_ARCHIVE: "archive",
     TYPE_CALL_DETACH: "user times",
     TYPE_CALL_UPDATE: "pencil alternate",
-    TYPE_UNIT_STATUSCHANGE: "car"
+    TYPE_UNIT_STATUSCHANGE: "car",
+    TYPE_CALL_CREATE: "headphones"
 };
 
 class CallLog extends React.Component {
