@@ -1,5 +1,43 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+
+function VehicleList({vehicles}) {
+    let x = [];
+    vehicles.forEach((e) => {
+        x.push(<tr key={e.id}>
+            <td>{e.make}</td>
+            <td>{e.model}</td>
+            <td>{e.plate}</td>
+            <td>{e.character.fname} {e.character.lname}</td>
+            <td><button className="ui mini basic button">
+                <i className="icon trash"> </i>
+                Delete
+            </button>
+                <Link to={"/c/vehicles/spec/" + e.id} className="ui mini basic button">
+                    <i className="icon file"> </i>
+                    View
+                </Link></td>
+        </tr>)
+    });
+    return x;
+}
+
+function compileVehicles(characters) {
+    let vehs = [];
+    characters.forEach((e) => {
+        let b = {};
+        Object.assign(b, e);
+        delete b.vehicles;
+        e.vehicles.forEach(ee => {
+            let a = {};
+            Object.assign(a, ee);
+            a.character = b;
+            vehs.push(a);
+        });
+    });
+    return vehs;
+}
 
 class Vehicles extends React.Component {
 
@@ -8,6 +46,7 @@ class Vehicles extends React.Component {
     }
 
     render() {
+        let vehs = compileVehicles(this.props.user.characters);
         return (<div>
             <h1>Vehicles</h1>
             <div className={"ui divider"}> </div>
@@ -25,10 +64,17 @@ class Vehicles extends React.Component {
                         <th>Options</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <VehicleList vehicles={vehs} />
+                </tbody>
             </table>
         </div>);
     }
 
 }
 
-export default Vehicles;
+let MSTP = ({user}) => {
+    return {user};
+};
+
+export default connect(MSTP)(Vehicles);

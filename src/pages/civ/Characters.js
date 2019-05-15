@@ -10,7 +10,7 @@ function CharacterList({characters, del}) {
             <td>{e.fname} {e.lname}</td>
             <td>{e.lstatus}</td>
             <td>{e.warrants.length}</td>
-            <td>0</td>
+            <td>{e.vehicles.length}</td>
             <td><button className="ui mini basic button" onClick={() => del(e)}>
                 <i className="icon trash"> </i>
                 Delete

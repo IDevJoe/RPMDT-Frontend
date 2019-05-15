@@ -3,11 +3,12 @@ import {Link} from "react-router-dom";
 import vehicles from '../../config/vehicles';
 import $ from 'jquery';
 import {connect} from "react-redux";
+import {createVehicle} from "../../lib/API";
 
 function VehicleMakeList() {
     let x = [];
     Object.keys(vehicles).forEach(e => {
-        x.push(<option>{e}</option>);
+        x.push(<option key={e}>{e}</option>);
     });
     return x;
 }
@@ -34,6 +35,7 @@ class NewVehicle extends React.Component {
         super(p);
         this.state = {loading: false, make: Object.keys(vehicles)[0]};
         this.makeChanged = this.makeChanged.bind(this);
+        this.cv = this.cv.bind(this);
     }
 
     regenerateDrops() {
@@ -52,6 +54,25 @@ class NewVehicle extends React.Component {
         this.setState({make: this.make.value});
     }
 
+    cv(e) {
+        e.preventDefault();
+        this.setState({loading: true});
+        let veh = {
+            make: this.make.value,
+            model: this.model.value,
+            color: this.color.value,
+            plate: this.plate.value
+        };
+        createVehicle(this.owner.value, veh).then((e) => {
+            this.setState({loading: false});
+            if(e.code != 201) {
+                alert("The vehicle was not created. Did you fill everything in?");
+                return;
+            }
+            this.props.history.push("/c/vehicles");
+        });
+    }
+
     render() {
         return <div>
             <h1>New Vehicle</h1>
@@ -66,25 +87,29 @@ class NewVehicle extends React.Component {
                     </div>
                     <div className={"field"}>
                         <label>Model</label>
-                        <select>
+                        <select ref={(e) => this.model = e}>
                             <VehicleModelList make={this.state.make}/>
                         </select>
                     </div>
                     <div className={"field"}>
+                        <label>Color</label>
+                        <input type={"text"} ref={(e) => this.color = e} />
+                    </div>
+                    <div className={"field"}>
                         <label>Owner</label>
-                        <select className={"ui search dropdown"}>
+                        <select className={"ui search dropdown"} ref={(e) => this.owner = e}>
                             <OwnerDrop characters={this.props.user.characters} />
                         </select>
                     </div>
                     <div className={"field"}>
                         <label>Plate #</label>
-                        <input type={"text"} />
+                        <input type={"text"} ref={(e) => this.plate = e} />
                     </div>
                 </div>
                 <Link to={"/c/vehicles"} className={"ui button"}>
                     Back
                 </Link>
-                <button className={"black ui button"}>
+                <button className={"black ui button"} onClick={this.cv}>
                     Create Vehicle
                 </button>
             </form>

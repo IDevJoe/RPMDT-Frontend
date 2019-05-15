@@ -26,4 +26,10 @@ export function subscribe(sock) {
         Object.assign(char, data.character);
         store.dispatch({type: SET_USER, user: state});
     });
+    sock.bind('vehicle.new', (data) => {
+        let state = cloneUser();
+        let char = state.characters.find((e) => e.id == data.vehicle.character.id);
+        char.vehicles.push(data.vehicle);
+        store.dispatch({type: SET_USER, user: state});
+    });
 }

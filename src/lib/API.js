@@ -179,3 +179,13 @@ export function IDLookup(lname) {
             }}).then(data => {res(data)});
     });
 }
+
+export function createVehicle(cid, vehicle) {
+    return new Promise((res, rej) => {
+        dispatch('/c/character/' + cid + "/vehicle", {method: 'POST',
+            body: JSON.stringify(vehicle),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
