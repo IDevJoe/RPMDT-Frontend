@@ -14,6 +14,7 @@ import Civ_NewC from '../pages/civ/NewCharacter';
 import Civ_EditC from '../pages/civ/EditCharacter';
 import Civ_Vehicles from '../pages/civ/Vehicles';
 import Civ_NewV from '../pages/civ/NewVehicle';
+import Civ_EditV from '../pages/civ/EditVehicle';
 
 import Un_Lookup_Character from '../pages/universal/lookup/CharacterLookup';
 
@@ -80,6 +81,7 @@ function AppRouter({user, dispatch}) {
                     <Route path={"/c/characters/spec/:id"} component={Civ_EditC} />
                     <Route path={"/c/vehicles"} exact component={Civ_Vehicles} />
                     <Route path={"/c/vehicles/new"} component={Civ_NewV} />
+                    <Route path={"/c/vehicles/spec/:id"} component={Civ_EditV} />
 
                     <Route path={"/u/id"} component={Un_Lookup_Character} />
                 </div>

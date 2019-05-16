@@ -189,3 +189,19 @@ export function createVehicle(cid, vehicle) {
             }}).then(data => {res(data)});
     });
 }
+
+export function editVehicle(vid, vehicle) {
+    return new Promise((res, rej) => {
+        dispatch('/c/vehicle/' + vid , {method: 'PATCH',
+            body: JSON.stringify(vehicle),
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(data => {res(data)});
+    });
+}
+
+export function delVehicle(vid) {
+    return new Promise((res, rej) => {
+        dispatch('/c/vehicle/' + vid , {method: 'DELETE'}).then(data => {res(data)});
+    });
+}
