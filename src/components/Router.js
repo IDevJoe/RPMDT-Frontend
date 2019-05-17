@@ -17,6 +17,7 @@ import Civ_NewV from '../pages/civ/NewVehicle';
 import Civ_EditV from '../pages/civ/EditVehicle';
 
 import Un_Lookup_Character from '../pages/universal/lookup/CharacterLookup';
+import Un_Lookup_Plate from '../pages/universal/lookup/PlateLookup';
 
 function AppRouter({user, dispatch}) {
     return (
@@ -84,6 +85,7 @@ function AppRouter({user, dispatch}) {
                     <Route path={"/c/vehicles/spec/:id"} component={Civ_EditV} />
 
                     <Route path={"/u/id"} component={Un_Lookup_Character} />
+                    <Route path={"/u/plate"} component={Un_Lookup_Plate} />
                 </div>
             </div>
         </Router>

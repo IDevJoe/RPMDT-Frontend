@@ -79,7 +79,9 @@ class EditVehicle extends React.Component {
             make: this.make.value,
             model: this.model.value,
             color: this.color.value,
-            plate: this.plate.value
+            plate: this.plate.value,
+            plstatus: this.plstatus.value,
+            instatus: this.instatus.value
         };
         editVehicle(veha.id, veh).then((e) => {
             this.setState({loading: false});
@@ -97,32 +99,48 @@ class EditVehicle extends React.Component {
             <h1>Update Vehicle</h1>
             <div className={"ui divider"}></div>
             <form className={"ui form" + (this.state.loading ? ' loading' : '')}>
-                <div className={"fields"}>
-                    <div className={"field"}>
+                <div className={"ui grid"}>
+                    <div className={"four wide column field"}>
                         <label>Make</label>
                         <select defaultValue={veh.make} className={"ui search dropdown"} ref={(e) => this.make = e} onChange={this.makeChanged}>
                             <VehicleMakeList/>
                         </select>
                     </div>
-                    <div className={"field"}>
+                    <div className={"four wide column field"}>
                         <label>Model</label>
                         <select defaultValue={veh.model} ref={(e) => this.model = e}>
                             <VehicleModelList make={this.state.make}/>
                         </select>
                     </div>
-                    <div className={"field"}>
+                    <div className={"four wide column field"}>
                         <label>Color</label>
                         <input defaultValue={veh.color} type={"text"} ref={(e) => this.color = e} />
                     </div>
-                    <div className={"field"}>
+                    <div className={"four wide column field"}>
                         <label>Owner</label>
                         <select defaultValue={veh.character.id} className={"ui search dropdown"} ref={(e) => this.owner = e}>
                             <OwnerDrop characters={this.props.user.characters} />
                         </select>
                     </div>
-                    <div className={"field"}>
+                    <div className={"four wide column field"}>
                         <label>Plate #</label>
                         <input defaultValue={veh.plate} type={"text"} ref={(e) => this.plate = e} />
+                    </div>
+                    <div className={"four wide column field"}>
+                        <label>Plate Status</label>
+                        <select className={"ui search dropdown"} defaultValue={veh.plstatus} ref={(e) => this.plstatus = e}>
+                            <option>Valid</option>
+                            <option>Stolen</option>
+                            <option>Revoked</option>
+                            <option>Expired</option>
+                        </select>
+                    </div>
+                    <div className={"four wide column field"}>
+                        <label>Insurance Status</label>
+                        <select className={"ui search dropdown"} defaultValue={veh.instatus} ref={(e) => this.instatus = e}>
+                            <option>Insured</option>
+                            <option>Uninsured</option>
+                        </select>
                     </div>
                 </div>
                 <Link to={"/c/vehicles"} className={"ui button"}>

@@ -158,6 +158,7 @@ class NewCharacter extends React.Component {
                                 <option>None</option>
                                 <option>Valid</option>
                                 <option>Suspended</option>
+                                <option>Revoked</option>
                                 <option>Expired</option>
                             </select>
                         </div>

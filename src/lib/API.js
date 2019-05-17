@@ -205,3 +205,9 @@ export function delVehicle(vid) {
         dispatch('/c/vehicle/' + vid , {method: 'DELETE'}).then(data => {res(data)});
     });
 }
+
+export function lookupPlate(plate) {
+    return new Promise((res, rej) => {
+        dispatch('/game/u/plate/' + encodeURIComponent(plate) , {method: 'GET'}).then(data => {res(data)});
+    });
+}
