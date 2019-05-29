@@ -47,6 +47,10 @@ function PlateInfo({p}) {
             <strong>Owner:</strong> {p.character.fname} {p.character.lname}
             <br /><strong>Color:</strong> {p.color}
         </p>
+        <p>
+            <strong>Plate Status:</strong> {p.plstatus} {p.plstatus !== "Valid" ? <i className="red exclamation triangle icon"> </i> : null}
+            <br /><strong>Insurance Status:</strong> {p.instatus} {p.instatus !== "Insured" ? <i className="orange exclamation triangle icon"> </i> : null}
+        </p>
     </div>
 }
 
